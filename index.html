@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8"> 
+<head>
+  <title>Local Environment Extractor</title>
+</head>
+<body>
+
+Character you are looking for: <input id="searchCharacter" type="text"></input>
+<br><br>
+Word bank: 
+<br>
+<textarea id="wordBank" cols="40" rows="10"></textarea>
+<br>
+<input type="submit" value="Submit" onclick='putLocalEnvironment()'></input>
+<br><br>
+Output:
+<br>
+<textarea id="output" cols="40" rows="10"></textarea>
+
+</body>
+
+
+<script type="text/javascript">
+
+var localEnvironments = [];
+
+function getCleanWordBank(){
+  var wordBank = document.getElementById('wordBank').value;
+  var cleanWordBankArray = wordBank.split('\n').map( x => x.trim() );
+  return cleanWordBankArray;
+}
+
+function searchLocalEnvironment(searchCharacter, word){
+  var wordLocalEnvironments = [];
+  word.split('').forEach( (letter, index) =>{
+    if (letter === searchCharacter){
+      var previous = word[index-1];
+      var after = word[index+1];
+      if (previous === undefined){ previous = '#'; }
+      if (after === undefined){ after = '#'; }
+      wordLocalEnvironments.push( previous+'__'+after );
+    }
+  });
+  return wordLocalEnvironments;
+}
+
+function reduceLocalEnvironments(searchCharacter, word){
+  var wordLocalEnvironments = searchLocalEnvironment(searchCharacter, word);
+  if (wordLocalEnvironments.length === 0){}
+  else if (wordLocalEnvironments.length >= 1){
+    wordLocalEnvironments.forEach( environment => localEnvironments.push(environment) )
+  }
+}
+
+function putLocalEnvironment(){
+  var bank = getCleanWordBank();
+  var searchCharacter = document.getElementById('searchCharacter').value;
+  bank.forEach( word => reduceLocalEnvironments(searchCharacter, word) );
+  console.log(localEnvironments);
+  document.getElementById('output').value = localEnvironments.join('\r\n');
+}
+
+</script>
+
+</html>
