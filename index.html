@@ -54,6 +54,7 @@ function reduceLocalEnvironments(searchCharacter, word){
 }
 
 function putLocalEnvironment(){
+  localEnvironments = []; //reset the local environment.
   var bank = getCleanWordBank();
   var searchCharacter = document.getElementById('searchCharacter').value;
   bank.forEach( word => reduceLocalEnvironments(searchCharacter, word) );

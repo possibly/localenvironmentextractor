@@ -1,4 +1,4 @@
-# localenvironmentextractor
+# Local Environment Extractor
 Given a list of phonetic transcriptions and a phonetic sound, this program will present a list of the local environments of that phonetic sound.
 
 # how to use
