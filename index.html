@@ -31,17 +31,23 @@ function getCleanWordBank(){
   return cleanWordBankArray;
 }
 
+function getCleanSearchCharacter(){
+  var searchCharacter = document.getElementById('searchCharacter').value;
+  return searchCharacter.trim();
+}
+
 function searchLocalEnvironment(searchCharacter, word){
   var wordLocalEnvironments = [];
-  word.split('').forEach( (letter, index) =>{
-    if (letter === searchCharacter){
-      var previous = word[index-1];
-      var after = word[index+1];
-      if (previous === undefined){ previous = '#'; }
-      if (after === undefined){ after = '#'; }
-      wordLocalEnvironments.push( previous+'__'+after );
-    }
-  });
+  if (word.contains(searchCharacter)){
+    //consider affricates
+    var beginningOfSearchCharacter = word.indexOf(searchCharacter[0]);
+    var endOfSearchCharacter = word.indexOf(searchCharacter[searchCharacter.length-1])
+    var previous = word[beginningOfSearchCharacter-1];
+    var after = word[endOfSearchCharacter+1];
+    if (previous === undefined){ previous = '#'; }
+    if (after === undefined){ after = '#'; }
+    wordLocalEnvironments.push( previous+'__'+after );
+  }
   return wordLocalEnvironments;
 }
 
@@ -56,7 +62,7 @@ function reduceLocalEnvironments(searchCharacter, word){
 function putLocalEnvironment(){
   localEnvironments = []; //reset the local environment.
   var bank = getCleanWordBank();
-  var searchCharacter = document.getElementById('searchCharacter').value;
+  var searchCharacter = getCleanSearchCharacter();
   bank.forEach( word => reduceLocalEnvironments(searchCharacter, word) );
   console.log(localEnvironments);
   document.getElementById('output').value = localEnvironments.join('\r\n');
