@@ -6,7 +6,7 @@
 </head>
 <body>
 
-Character you are looking for: <input id="searchCharacter" type="text"></input>
+Character you are looking for: <input id="searchString" type="text"></input>
 <br><br>
 Word bank: 
 <br>
@@ -20,54 +20,8 @@ Output:
 
 </body>
 
+<script src="localenv.js"></script>
 
-<script type="text/javascript">
-
-var localEnvironments = [];
-
-function getCleanWordBank(){
-  var wordBank = document.getElementById('wordBank').value;
-  var cleanWordBankArray = wordBank.split('\n').map( x => x.trim() );
-  return cleanWordBankArray;
-}
-
-function getCleanSearchCharacter(){
-  var searchCharacter = document.getElementById('searchCharacter').value;
-  return searchCharacter.trim();
-}
-
-function searchLocalEnvironment(searchCharacter, word){
-  var wordLocalEnvironments = [];
-  if (word.contains(searchCharacter)){
-    //consider affricates
-    var beginningOfSearchCharacter = word.indexOf(searchCharacter[0]);
-    var endOfSearchCharacter = word.indexOf(searchCharacter[searchCharacter.length-1])
-    var previous = word[beginningOfSearchCharacter-1];
-    var after = word[endOfSearchCharacter+1];
-    if (previous === undefined){ previous = '#'; }
-    if (after === undefined){ after = '#'; }
-    wordLocalEnvironments.push( previous+'__'+after );
-  }
-  return wordLocalEnvironments;
-}
-
-function reduceLocalEnvironments(searchCharacter, word){
-  var wordLocalEnvironments = searchLocalEnvironment(searchCharacter, word);
-  if (wordLocalEnvironments.length === 0){}
-  else if (wordLocalEnvironments.length >= 1){
-    wordLocalEnvironments.forEach( environment => localEnvironments.push(environment) )
-  }
-}
-
-function putLocalEnvironment(){
-  localEnvironments = []; //reset the local environment.
-  var bank = getCleanWordBank();
-  var searchCharacter = getCleanSearchCharacter();
-  bank.forEach( word => reduceLocalEnvironments(searchCharacter, word) );
-  console.log(localEnvironments);
-  document.getElementById('output').value = localEnvironments.join('\r\n');
-}
-
-</script>
+<script src="main.js"></script>
 
 </html>
